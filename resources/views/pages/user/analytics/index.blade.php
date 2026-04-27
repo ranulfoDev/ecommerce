@@ -10,7 +10,7 @@
         <div class="bg-white p-6 rounded-2xl shadow border">
             <h2 class="font-bold mb-2">⚡ Conversion Rate</h2>
 
-            <div class="w-full bg-gray-200 rounded-full h-4">
+            <div class="overflow-hidden">
                 <div class="bg-green-500 h-4 rounded-full" style="width: {{ $conversion }}%">
                 </div>
             </div>

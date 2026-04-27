@@ -22,21 +22,27 @@
                 ⭐ Featured Products
             </h2>
 
+            @php
+                $products = [
+                    ['name' => 'System Unit', 'price' => 99, 'image' => 'System Unit.png'],
+                    ['name' => 'Monitor', 'price' => 149, 'image' => 'monitor.png'],
+                    ['name' => 'Mouse', 'price' => 59, 'image' => 'mouse.png'],
+                    ['name' => 'Keyboard', 'price' => 120, 'image' => 'key board.png'],
+                ];
+            @endphp
+
             <div class="grid md:grid-cols-4 gap-8">
 
-                @for ($i = 1; $i <= 4; $i++)
+                @foreach ($products as $product)
                     <div class="bg-white rounded-xl shadow hover:shadow-lg transition p-4">
 
-                        <div class="h-48 bg-gray-200 rounded-lg mb-4"></div>
+                        <img src="{{ asset('storage/products/' . $product['image']) }}"
+                            class="h-48 w-full object-cover rounded-lg mb-4">
 
-                        <h3 class="font-semibold text-lg">Product Name</h3>
-
-                        <p class="text-gray-500 text-sm mb-2">
-                            Short product description
-                        </p>
+                        <h3 class="font-semibold text-lg">{{ $product['name'] }}</h3>
 
                         <p class="text-blue-600 font-bold mb-3">
-                            $29.99
+                            ${{ $product['price'] }}
                         </p>
 
                         <button class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
@@ -44,11 +50,9 @@
                         </button>
 
                     </div>
-                @endfor
+                @endforeach
 
             </div>
-
-        </div>
     </section>
 
 
@@ -96,28 +100,35 @@
                 🔥 Best Sellers
             </h2>
 
+            @php
+                $bestSellers = [
+                    ['name' => 'Cell phone', 'price' => 99, 'image' => 'cell phone.png'],
+                    ['name' => 'Tablet', 'price' => 149, 'image' => 'tablet.png'],
+                    ['name' => 'Laptop', 'price' => 59, 'image' => 'laptop.png'],
+                ];
+            @endphp
+
             <div class="grid md:grid-cols-3 gap-8">
 
-                @for ($i = 1; $i <= 3; $i++)
+                @foreach ($bestSellers as $product)
                     <div class="bg-white rounded-xl shadow p-6 flex gap-4 items-center hover:shadow-lg transition">
 
-                        <div class="w-24 h-24 bg-gray-200 rounded-lg"></div>
+                        <img src="{{ asset('storage/products/' . $product['image']) }}"
+                            class="w-24 h-24 object-cover rounded-lg">
 
                         <div>
-                            <h3 class="font-semibold">Popular Product</h3>
+                            <h3 class="font-semibold">{{ $product['name'] }}</h3>
                             <p class="text-gray-500 text-sm">Best selling item</p>
 
                             <p class="text-blue-600 font-bold mt-1">
-                                $39.99
+                                ${{ $product['price'] }}
                             </p>
                         </div>
 
                     </div>
-                @endfor
+                @endforeach
 
             </div>
-
-        </div>
     </section>
 
 

@@ -31,7 +31,6 @@ class AuthController extends Controller
         User::create([
             'name' => $request->name,
             'email' => $request->email,
-            // ✅ FINAL FIX: manual hash (BEST PRACTICE)
             'password' => Hash::make($request->password),
             'role' => 'user',
             'status' => 'active',

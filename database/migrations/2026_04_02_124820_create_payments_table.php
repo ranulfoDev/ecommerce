@@ -18,6 +18,8 @@ return new class extends Migration
     $table->string('method');
     $table->decimal('amount', 10, 2);
     $table->string('status')->default('pending');
+      $table->string('transaction_id')->nullable();  // NEW
+        $table->string('payer_email')->nullable(); 
     $table->timestamps();
 
         });

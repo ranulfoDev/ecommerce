@@ -1,4 +1,4 @@
-<x-user-layout>
+<x-layouts.user-layout>
     <h1 class="text-2xl font-bold mb-4">My Orders</h1>
 
     @if (session('success'))
@@ -60,4 +60,4 @@
             </tbody>
         </table>
     </div>
-</x-user-layout>
+</x-layouts.user-layout>

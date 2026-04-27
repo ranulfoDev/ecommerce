@@ -14,15 +14,29 @@
             </div>
 
             <!-- GRID -->
+            @php
+                $products = [
+                    ['id' => 1, 'name' => 'System Unit gaming', 'price' => 120, 'image' => 'system unit gaming.png'],
+                    ['id' => 2, 'name' => 'Monitor gaming', 'price' => 150, 'image' => 'monitor gaming.png'],
+                    ['id' => 3, 'name' => 'Mouse gaming', 'price' => 60, 'image' => 'mouse gaming.png'],
+                    ['id' => 4, 'name' => 'Key board gaming', 'price' => 110, 'image' => 'key board gaming.png'],
+                    ['id' => 5, 'name' => 'Head phone gaming', 'price' => 90, 'image' => 'head phone gaming.png'],
+                    ['id' => 6, 'name' => 'Chair gaming', 'price' => 80, 'image' => 'chair gaming.png'],
+                    ['id' => 7, 'name' => 'Webcam', 'price' => 70, 'image' => 'webcam.png'],
+                    ['id' => 8, 'name' => 'Laptop gaming', 'price' => 55, 'image' => 'laptop gaming.png'],
+                ];
+            @endphp
+
             <div class="grid md:grid-cols-4 sm:grid-cols-2 gap-10">
 
-                @for ($i = 1; $i <= 8; $i++)
+                @foreach ($products as $product)
                     <div
                         class="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-2xl transition duration-300 overflow-hidden hover:-translate-y-2">
 
                         <!-- IMAGE -->
                         <div class="relative">
-                            <div class="h-48 bg-gradient-to-br from-gray-200 to-gray-300"></div>
+                            <img src="{{ asset('storage/products/' . $product['image']) }}"
+                                class="h-48 w-full object-cover">
 
                             <!-- BADGE -->
                             <span
@@ -35,10 +49,10 @@
                         <div class="p-5">
 
                             <h3 class="font-semibold text-lg text-gray-800 group-hover:text-blue-600 transition">
-                                Product {{ $i }}
+                                {{ $product['name'] }}
                             </h3>
 
-                            <!-- RATING (UI LANG) -->
+                            <!-- RATING -->
                             <div class="flex items-center text-yellow-400 text-sm mt-1">
                                 ★★★★☆
                                 <span class="text-gray-400 ml-2">(4.0)</span>
@@ -46,22 +60,20 @@
 
                             <!-- PRICE -->
                             <p class="text-xl font-bold text-gray-900 mt-3">
-                                $ {{ rand(50, 150) }}
+                                ${{ $product['price'] }}
                             </p>
 
                             <!-- BUTTON -->
-                            <a href="{{ route('products.show', $i) }}"
+                            <a href="{{ route('products.show', $product['id']) }}"
                                 class="block mt-5 w-full text-center bg-blue-600 text-white py-2.5 rounded-xl font-medium hover:bg-blue-700 transition">
                                 View Details
                             </a>
 
                         </div>
                     </div>
-                @endfor
+                @endforeach
 
             </div>
-
-        </div>
     </section>
 
 </x-layouts.landing-layout>

@@ -4,6 +4,7 @@
 
     <form action="{{ route('admin.coupons.store') }}" method="POST" class="grid grid-cols-3 gap-2 mb-6">
         @csrf
+
         <input name="code" placeholder="Code" class="border p-2 rounded">
         <input name="discount" placeholder="Discount" class="border p-2 rounded">
         <input type="date" name="expires_at" class="border p-2 rounded">

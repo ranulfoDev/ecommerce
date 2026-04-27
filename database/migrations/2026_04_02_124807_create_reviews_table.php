@@ -11,16 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reviews', function (Blueprint $table) {
-      
+    Schema::create('reviews', function (Blueprint $table) {
+
     $table->id();
     $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
     $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
     $table->integer('rating');
     $table->text('comment')->nullable();
+    $table->boolean('approved')->default(false);
     $table->timestamps();
 
-        });
+});
     }
 
     /**

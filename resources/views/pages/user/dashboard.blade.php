@@ -133,9 +133,34 @@
                                 ₱{{ number_format($product->price, 2) }}
                             </p>
 
+                            @php
+                                $avgRating = $product->reviews->avg('rating');
+                            @endphp
+
                             <p class="text-yellow-400 text-sm">
-                                ⭐ {{ number_format(optional($product->reviews)->avg('rating') ?? 0, 1) }}
+                                ⭐ {{ $avgRating ? number_format($avgRating, 1) : '0.0' }}
                             </p>
+
+                            <form action="{{ route('user.review.store') }}" method="POST" class="mt-3">
+                                @csrf
+
+                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+
+                                <select name="rating" class="w-full border rounded p-1 mb-2">
+                                    <option value="">Rate</option>
+                                    <option value="5">⭐⭐⭐⭐⭐</option>
+                                    <option value="4">⭐⭐⭐⭐</option>
+                                    <option value="3">⭐⭐⭐</option>
+                                    <option value="2">⭐⭐</option>
+                                    <option value="1">⭐</option>
+                                </select>
+
+                                <textarea name="comment" placeholder="Comment..." class="w-full border rounded p-1 mb-2"></textarea>
+
+                                <button class="bg-yellow-500 text-white w-full py-1 rounded">
+                                    ⭐ Submit Review
+                                </button>
+                            </form>
 
                             <form action="{{ route('user.cart.add') }}" method="POST">
                                 @csrf

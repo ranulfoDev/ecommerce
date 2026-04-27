@@ -23,6 +23,7 @@ class DashboardController extends Controller
      
 
    // BASE QUERY
+// BASE QUERY
 $query = Product::with('reviews');
 
         // SEARCH
@@ -58,9 +59,11 @@ $query = Product::with('reviews');
         }
  
 
-if ($rating) {
+// FILTER BY RATING (ONLY IF MERON)
+if (!is_null($rating)) {
     $query->whereHas('reviews', function ($q) use ($rating) {
-        $q->where('rating', '>=', $rating);
+        $q->where('approved', true)
+          ->where('rating', '>=', $rating);
     });
 }
 
@@ -100,4 +103,4 @@ if ($rating) {
             'sort'
         ));
     }
-}
+}   

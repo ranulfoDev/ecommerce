@@ -33,6 +33,11 @@ class Product extends Model
         return $this->hasMany(\App\Models\Review::class);
     }
 
+     public function approvedReviews()
+{
+    return $this->hasMany(\App\Models\Review::class)->where('approved', true);
+}
+
     // 🔥 AUTO IMAGE FIX
     public function getImageAttribute($value)
     {
@@ -50,4 +55,6 @@ class Product extends Model
     {
         return number_format($this->price, 2);
     }
+
+    
 }

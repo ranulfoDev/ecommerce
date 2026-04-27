@@ -16,17 +16,16 @@ class CouponController extends Controller
 
   public function store(Request $request)
 {
-    $request->validate([
-        'code' => 'required',
-        'discount' => 'required|numeric',
-        'status' => 'required'
-    ]);
+$request->validate([
+    'code' => 'required',
+    'discount' => 'required|numeric',
+]);
 
-    Coupon::create([
-        'code' => $request->code,
-        'discount' => $request->discount,
-        'status' => $request->status,
-    ]);
+Coupon::create([
+    'code' => strtoupper($request->code),
+    'discount' => $request->discount,
+    'expires_at' => $request->expires_at,
+]);
 
     return back()->with('success', 'Coupon created!');
 }

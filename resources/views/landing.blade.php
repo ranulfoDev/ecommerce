@@ -120,21 +120,21 @@
                 </div>
 
                 <div class="group bg-white p-6 rounded-2xl border hover:shadow-xl transition">
-                    <img src="{{ asset('storage/products/headponds.jpg') }}"
+                    <img src="{{ asset('storage\products\head phone1.png') }}"
                         class="h-40 w-full object-cover rounded-lg mb-4" />
                     <h3 class="font-semibold group-hover:text-blue-600">Wireless Headphones</h3>
                     <p class="text-gray-500 text-sm">$149</p>
                 </div>
 
                 <div class="group bg-white p-6 rounded-2xl border hover:shadow-xl transition">
-                    <img src="{{ asset('storage/products/mouse.png') }}"
+                    <img src="{{ asset('storage/products/wireless mouse.png') }}"
                         class="h-40 w-full object-cover rounded-lg mb-4" />
                     <h3 class="font-semibold group-hover:text-blue-600">Gaming Mouse</h3>
                     <p class="text-gray-500 text-sm">$59</p>
                 </div>
 
                 <div class="group bg-white p-6 rounded-2xl border hover:shadow-xl transition">
-                    <img src="{{ asset('storage/products/keyboard.png') }}"
+                    <img src="{{ asset('storage\products\key board (2).png') }}"
                         class="h-40 w-full object-cover rounded-lg mb-4" />
                     <h3 class="font-semibold group-hover:text-blue-600">Mechanical Keyboard</h3>
                     <p class="text-gray-500 text-sm">$120</p>

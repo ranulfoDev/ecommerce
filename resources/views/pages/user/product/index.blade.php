@@ -8,19 +8,21 @@
         </h1>
 
         <!-- GRID -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 items-stretch">
 
             @forelse($products as $product)
-                <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden">
+                <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden flex flex-col h-full">
 
                     <!-- IMAGE -->
-                    <img src="{{ $product->image ?? 'https://via.placeholder.com/300' }}"
-                        class="w-full h-48 object-cover">
+                    <div class="h-48 w-full overflow-hidden">
+                        <img src="{{ $product->image ?? 'https://via.placeholder.com/300' }}"
+                            class="w-full h-full object-cover">
+                    </div>
 
                     <!-- CONTENT -->
-                    <div class="p-4">
+                    <div class="p-4 flex flex-col flex-1">
 
-                        <h2 class="font-semibold text-lg text-gray-800 truncate">
+                        <h2 class="font-semibold text-lg text-gray-800 line-clamp-2">
                             {{ $product->name }}
                         </h2>
 
@@ -42,8 +44,8 @@
                             </div>
                         </div>
 
-                        <!-- BUTTONS -->
-                        <div class="mt-4 flex gap-2">
+                        <!-- BUTTONS SA PINAKA BABA -->
+                        <div class="mt-auto flex gap-2 pt-4">
 
                             <!-- VIEW -->
                             <a href="{{ route('user.products.show', $product->id) }}"
@@ -65,18 +67,19 @@
                             @else
                                 <button disabled
                                     class="w-1/2 bg-gray-300 text-gray-500 py-2 rounded-lg cursor-not-allowed">
-                                    Out of Stock
+                                    Out
                                 </button>
                             @endif
 
                         </div>
 
                     </div>
-                @empty
+                </div>
+            @empty
 
-                    <p class="col-span-4 text-center text-gray-500">
-                        No products available.
-                    </p>
+                <p class="col-span-4 text-center text-gray-500">
+                    No products available.
+                </p>
             @endforelse
 
         </div>

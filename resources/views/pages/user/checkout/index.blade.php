@@ -12,6 +12,9 @@
                     <form id="checkoutForm" action="{{ route('user.placeOrder') }}" method="POST">
                         @csrf
 
+                        <input type="hidden" name="coupon_code" id="coupon_code_hidden">
+                        <input type="hidden" name="discount_amount" id="discount_amount">
+
                         <!-- NAME -->
                         <div class="mb-6">
                             <input type="text" name="name" value="{{ old('name') }}" placeholder="Full Name"
@@ -32,19 +35,21 @@
                             @enderror
                         </div>
 
-                        <!-- PAYMENT -->
+                        <!-- PAYMENT METHOD -->
                         <div class="mb-6">
                             <label class="block mb-2 font-medium">Payment Method</label>
 
                             <div class="flex gap-4">
                                 <label class="border p-3 rounded-xl w-full cursor-pointer">
-                                    <input type="radio" name="payment_method" value="cod" checked>
+                                    <input type="radio" name="payment_method" value="cod" checked
+                                        onchange="togglePaymentMethod('cod')">
                                     Cash on Delivery
                                 </label>
 
                                 <label class="border p-3 rounded-xl w-full cursor-pointer">
-                                    <input type="radio" name="payment_method" value="gcash">
-                                    GCash
+                                    <input type="radio" name="payment_method" value="paypal"
+                                        onchange="togglePaymentMethod('paypal')">
+                                    PayPal
                                 </label>
                             </div>
 
@@ -53,18 +58,25 @@
                             @enderror
                         </div>
 
-                        <!-- BUTTON -->
-                        <button id="submitBtn"
-                            class="w-full bg-pink-500 text-white py-3 rounded-xl flex justify-center items-center gap-2">
+                        <!-- COD SECTION -->
+                        <div id="cod-section">
+                            <button id="submitBtn" type="submit"
+                                class="w-full bg-pink-500 text-white py-3 rounded-xl flex justify-center items-center gap-2 hover:bg-pink-600">
 
-                            <span id="btnText">Place Order</span>
+                                <span id="btnText">Place Order</span>
 
-                            <svg id="spinner" class="hidden animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg"
-                                fill="none" viewBox="0 0 24 24">
-                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
-                                </circle>
-                            </svg>
-                        </button>
+                                <svg id="spinner" class="hidden animate-spin h-5 w-5"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                                    </circle>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- PAYPAL SECTION -->
+                        <div id="paypal-section" class="hidden" data-total="{{ $total }}">
+                            <div id="paypal-button-container"></div>
+                        </div>
 
                     </form>
 
@@ -101,11 +113,23 @@
                         @endforelse
                     </div>
 
+                    <div class="mb-4">
+                        <input type="text" id="coupon_code" placeholder="Enter coupon"
+                            class="w-full border px-3 py-2 rounded">
+
+                        <button type="button" onclick="applyCoupon()"
+                            class="mt-2 w-full bg-gray-800 text-white py-2 rounded">
+                            Apply Coupon
+                        </button>
+
+                        <p id="coupon_msg" class="text-sm mt-2"></p>
+                    </div>
+
                     <div class="border-t my-4"></div>
 
                     <div class="flex justify-between font-semibold text-lg">
                         <span>Total</span>
-                        <span class="text-pink-500">₱{{ $total }}</span>
+                        <span id="totalText" class="text-pink-500">₱{{ $total }}</span>
                     </div>
 
                 </div>
@@ -114,18 +138,84 @@
         </div>
     </div>
 
-    <!-- SPINNER SCRIPT -->
+    <!-- SCRIPT -->
     <script>
+        function togglePaymentMethod(method) {
+            const codSection = document.getElementById('cod-section');
+            const paypalSection = document.getElementById('paypal-section');
+
+            if (method === 'cod') {
+                codSection.classList.remove('hidden');
+                paypalSection.classList.add('hidden');
+            } else {
+                codSection.classList.add('hidden');
+                paypalSection.classList.remove('hidden');
+            }
+        }
+
         const form = document.getElementById("checkoutForm");
         const btn = document.getElementById("submitBtn");
         const spinner = document.getElementById("spinner");
         const text = document.getElementById("btnText");
 
-        form.addEventListener("submit", function() {
-            btn.disabled = true;
-            spinner.classList.remove("hidden");
-            text.innerText = "Processing...";
-        });
+        if (form) {
+            form.addEventListener("submit", function(e) {
+                const selected = document.querySelector('input[name="payment_method"]:checked').value;
+
+                // 🚫 prevent submit if PayPal
+                if (selected === 'paypal') {
+                    e.preventDefault();
+                    return;
+                }
+
+                if (btn) {
+                    btn.disabled = true;
+                    spinner.classList.remove("hidden");
+                    text.innerText = "Processing...";
+                }
+            });
+        }
+    </script>
+
+    <!-- PAYPAL JS -->
+    <script src="{{ asset('js/paypal-checkout.js') }}"></script>
+    <script>
+        function applyCoupon() {
+            let code = document.getElementById('coupon_code').value.toUpperCase();
+
+            fetch('/apply-coupon', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        code: code
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+
+                    let msg = document.getElementById('coupon_msg');
+
+                    if (data.error) {
+                        msg.innerText = data.error;
+                        msg.style.color = 'red';
+                    } else {
+                        msg.innerText = data.message;
+                        msg.style.color = 'green';
+
+                        let discount = originalTotal * (data.discount / 100);
+                        discountedTotal = originalTotal - discount;
+
+                        document.getElementById('totalText').innerText = "₱" + discountedTotal;
+
+                        // ✅ SAVE TO FORM
+                        document.getElementById('coupon_code_hidden').value = code;
+                        document.getElementById('discount_amount').value = discount;
+                    }
+                });
+        }
     </script>
 
 </x-layouts.user-layout>
